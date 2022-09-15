@@ -1,0 +1,29 @@
+<div class="binary-translation" style="max-width: 400px">
+  <% binary_translation.each.with_index do |char, index| %>
+    <span style="color: #A00">
+      <%= char %>
+    </span>
+  <% end %>
+</div>
+
+<form class="translation-form" action="/" method="post">
+  <textarea class="answer"></textarea>
+</form>
+
+<script type="text/javascript">
+  const guess = document.querySelector(".answer");
+  guess.addEventListener("input", checkGuess);
+
+  function checkGuess(event) {
+    event.preventDefault();
+    const answer = "<%= answer %>";
+
+    let index = 0;
+    const binarySpans = document.querySelectorAll(".binary-translation span");
+    answer.split('').forEach((char) => {
+      const color = char === guess.value[index] ? "#0A0" : "#A00";
+      binarySpans[index].style.color = color;
+      index++;
+    });
+  }
+</script>
