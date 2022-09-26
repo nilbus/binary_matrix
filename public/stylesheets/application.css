@@ -1,0 +1,14 @@
+body, input, textarea {
+  background-color: #111;
+  color: #1A1;
+  font-family: PT Mono, monospace;
+}
+
+.translation-form input, .binary-translation textarea {
+  border-style: none !important;
+}
+
+.big {
+  width: 100%;
+  font-size: 5em;
+}

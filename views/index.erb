@@ -1,29 +1,24 @@
-<div class="binary-translation" style="max-width: 400px">
-  <% binary_translation.each.with_index do |char, index| %>
-    <span style="color: #A00">
-      <%= char %>
-    </span>
-  <% end %>
+<div class="binary-translation">
+  <textarea class="binary big" rows="12"><%= binary_translation.join(' ') %></textarea>
 </div>
 
-<form class="translation-form" action="/" method="post">
-  <textarea class="answer"></textarea>
-</form>
-
 <script type="text/javascript">
-  const guess = document.querySelector(".answer");
-  guess.addEventListener("input", checkGuess);
+  const binaryInput = document.querySelector(".binary");
+  let answerState = "";
 
-  function checkGuess(event) {
-    event.preventDefault();
-    const answer = "<%= answer %>";
-
-    let index = 0;
-    const binarySpans = document.querySelectorAll(".binary-translation span");
-    answer.split('').forEach((char) => {
-      const color = char === guess.value[index] ? "#0A0" : "#A00";
-      binarySpans[index].style.color = color;
-      index++;
-    });
+  function updateAnswer() {
+    fetch('/answer_binary ', { method: 'get' })
+      .then(function(response) {
+        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+        return response.text();
+      })
+      .then(function(body) {
+        if (answerState != body) {
+          answerState = body;
+          binaryInput.value = body;
+        }
+      });
   }
+
+  setInterval(updateAnswer, 333)
 </script>

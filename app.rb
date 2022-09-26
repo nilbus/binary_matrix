@@ -14,11 +14,17 @@ class BinaryMatrix < Sinatra::Base
   end
 
   post "/update_answer" do
-    write_phrase(params[:answer])
+    write_phrase(request.body.read&.chomp)
+    202
+  end
+
+  get "/answer_binary" do
+    phrase = load_phrase
+    translate_phrase(phrase).join(" ")
   end
 
   def load_phrase
-    File.read(STORE).chomp
+    File.read(STORE).to_s.chomp
   rescue
     ""
   end
@@ -27,8 +33,8 @@ class BinaryMatrix < Sinatra::Base
     File.write(STORE, phrase)
   end
 
-  def translate_phrase
-    PHRASE.split(//).map { |char| char_to_binary(char) }
+  def translate_phrase(phrase)
+    phrase.split(//).map { |char| char_to_binary(char) }
   end
 
   def char_to_binary(char)
